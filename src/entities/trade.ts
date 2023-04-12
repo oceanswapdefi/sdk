@@ -95,13 +95,13 @@ export interface DaasOptions {
  * In other words, if the currency is ETHER, returns the WETH token amount for the given chain. Otherwise, returns
  * the input currency amount.
  */
-function wrappedAmount(currencyAmount: CurrencyAmount, chainId: ChainId = ChainId.AVALANCHE): TokenAmount {
+function wrappedAmount(currencyAmount: CurrencyAmount, chainId: ChainId = ChainId.PULSE_TESTNET): TokenAmount {
   if (currencyAmount instanceof TokenAmount) return currencyAmount
   if (currencyAmount.currency === CAVAX[chainId]) return new TokenAmount(WAVAX[chainId], currencyAmount.raw)
   invariant(false, 'CURRENCY')
 }
 
-function wrappedCurrency(currency: Currency, chainId: ChainId = ChainId.AVALANCHE): Token {
+function wrappedCurrency(currency: Currency, chainId: ChainId = ChainId.PULSE_TESTNET): Token {
   if (currency instanceof Token) return currency
   if (currency === CAVAX[chainId]) return WAVAX[chainId]
   invariant(false, 'CURRENCY')
@@ -141,7 +141,11 @@ export class Trade {
    */
   public readonly priceImpact: Percent
 
-  public readonly chainId: ChainId = ChainId.AVALANCHE
+  public readonly chainId: ChainId = ChainId.PULSE_TESTNET
+
+  public readonly fee: Percent = new Percent(ZERO)
+
+  public readonly feeTo: string = ZERO_ADDRESS
 
   public readonly fee: Percent = new Percent(ZERO)
 
@@ -154,13 +158,8 @@ export class Trade {
    * @param chainId chain id
    * @param daasOptions fee information possibly imposed via DEX as a service
    */
-  public static exactIn(
-    route: Route,
-    amountIn: CurrencyAmount,
-    chainId: ChainId = ChainId.AVALANCHE,
-    daasOptions?: DaasOptions
-  ): Trade {
-    return new Trade(route, amountIn, TradeType.EXACT_INPUT, chainId, daasOptions)
+  public static exactIn(route: Route, amountIn: CurrencyAmount, chainId: ChainId = ChainId.PULSE_TESTNET): Trade {
+    return new Trade(route, amountIn, TradeType.EXACT_INPUT, chainId)
   }
 
   /**
@@ -170,22 +169,11 @@ export class Trade {
    * @param chainId chain id
    * @param daasOptions fee information possibly imposed via DEX as a service
    */
-  public static exactOut(
-    route: Route,
-    amountOut: CurrencyAmount,
-    chainId: ChainId = ChainId.AVALANCHE,
-    daasOptions?: DaasOptions
-  ): Trade {
-    return new Trade(route, amountOut, TradeType.EXACT_OUTPUT, chainId, daasOptions)
+  public static exactOut(route: Route, amountOut: CurrencyAmount, chainId: ChainId = ChainId.PULSE_TESTNET): Trade {
+    return new Trade(route, amountOut, TradeType.EXACT_OUTPUT, chainId)
   }
 
-  public constructor(
-    route: Route,
-    amount: CurrencyAmount,
-    tradeType: TradeType,
-    chainId: ChainId = ChainId.AVALANCHE,
-    { fee, feeTo }: DaasOptions = { fee: ZERO_PERCENT, feeTo: ZERO_ADDRESS }
-  ) {
+  public constructor(route: Route, amount: CurrencyAmount, tradeType: TradeType, chainId: ChainId = ChainId.PULSE_TESTNET) {
     const amounts: TokenAmount[] = new Array(route.path.length)
     const nextPools: Pool[] = new Array(route.pools.length)
     let fullOutputAmount: TokenAmount
@@ -247,7 +235,7 @@ export class Trade {
    * Get the minimum amount that must be received from this trade for the given slippage tolerance
    * @param slippageTolerance tolerance of unfavorable slippage from the execution price of this trade
    */
-  public minimumAmountOut(slippageTolerance: Percent): CurrencyAmount {
+  public minimumAmountOut(slippageTolerance: Percent, chainId: ChainId = ChainId.PULSE_TESTNET): CurrencyAmount {
     invariant(!slippageTolerance.lessThan(ZERO), 'SLIPPAGE_TOLERANCE')
     if (this.tradeType === TradeType.EXACT_OUTPUT) {
       return this.outputAmount
@@ -266,7 +254,7 @@ export class Trade {
    * Get the maximum amount in that can be spent via this trade for the given slippage tolerance
    * @param slippageTolerance tolerance of unfavorable slippage from the execution price of this trade
    */
-  public maximumAmountIn(slippageTolerance: Percent): CurrencyAmount {
+  public maximumAmountIn(slippageTolerance: Percent, chainId: ChainId = ChainId.PULSE_TESTNET): CurrencyAmount {
     invariant(!slippageTolerance.lessThan(ZERO), 'SLIPPAGE_TOLERANCE')
     if (this.tradeType === TradeType.EXACT_INPUT) {
       return this.inputAmount

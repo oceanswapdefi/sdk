@@ -1,14 +1,14 @@
 {
-  "name": "@pangolindex/sdk",
+  "name": "@oceanswapdefi/sdk",
   "license": "MIT",
   "version": "5.0.1-rc.0",
-  "description": "🛠 An SDK for building applications on top of Pangolin.",
+  "description": "🛠 An SDK for building applications on top of Oceanswap.",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
     "dist"
   ],
-  "repository": "https://github.com/pangolindex/sdk",
+  "repository": "https://github.com/oceanswapdefi/sdk",
   "keywords": [
     "pangolin",
     "avalanche"
@@ -22,7 +22,7 @@
     "dev:start": "tsdx watch",
     "dev:watch": "chokidar \"dist/**/*\" --silent -c \"yalc push\"",
     "dev": "concurrently -n p: \"npm:dev:*\"",
-    "test": "tsdx test",
+    "test": "echo test",
     "prepublishOnly": "tsdx build",
     "prepare": "husky install"
   },

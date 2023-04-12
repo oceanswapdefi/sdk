@@ -22,7 +22,7 @@ import { InsufficientReservesError, InsufficientInputAmountError } from '../../e
 import { sqrt, parseBigintIsh } from '../../utils'
 
 export class Pair extends Pool {
-  public static getAddress(tokenA: Token, tokenB: Token, chainId: ChainId = ChainId.AVALANCHE): string {
+  public static getAddress(tokenA: Token, tokenB: Token, chainId: ChainId = ChainId.PULSE_TESTNET): string {
     const tokens = tokenA.sortsBefore(tokenB) ? [tokenA, tokenB] : [tokenB, tokenA] // does safety checks
 
     // we create custom lp address here
@@ -37,7 +37,7 @@ export class Pair extends Pool {
       : `${tokens[0].address}-${tokens[1].address}`
   }
 
-  public constructor(tokenAmountA: TokenAmount, tokenAmountB: TokenAmount, chainId: ChainId = ChainId.AVALANCHE) {
+  public constructor(tokenAmountA: TokenAmount, tokenAmountB: TokenAmount, chainId: ChainId = ChainId.PULSE_TESTNET) {
     const tokenAmounts = tokenAmountA.token.sortsBefore(tokenAmountB.token) // does safety checks
       ? [tokenAmountA, tokenAmountB]
       : [tokenAmountB, tokenAmountA]
@@ -87,13 +87,7 @@ export class Pair extends Pool {
   }
 
   public get swapFeeCoefficient(): JSBI {
-    switch (this.chainId) {
-      case ChainId.NEAR_MAINNET:
-      case ChainId.NEAR_TESTNET:
-        return _998 // 0.2%
-      default:
-        return _997 // 0.3%
-    }
+    return _997 // 0.3%
   }
 
   public get swapFeeDivisor(): JSBI {
@@ -103,8 +97,8 @@ export class Pair extends Pool {
     }
   }
 
-  public getOutputAmount(inputAmount: TokenAmount, outputToken: Token): [TokenAmount, Pair] {
-    invariant(this.involvesToken(inputAmount.token) && this.involvesToken(outputToken), 'TOKEN')
+  public getOutputAmount(inputAmount: TokenAmount, chainId: ChainId = ChainId.PULSE_TESTNET): [TokenAmount, Pair] {
+    invariant(this.involvesToken(inputAmount.token), 'TOKEN')
     if (JSBI.equal(this.reserve0.raw, ZERO) || JSBI.equal(this.reserve1.raw, ZERO)) {
       throw new InsufficientReservesError()
     }
@@ -123,8 +117,8 @@ export class Pair extends Pool {
     return [outputAmount, new Pair(inputReserve.add(inputAmount), outputReserve.subtract(outputAmount), this.chainId)]
   }
 
-  public getInputAmount(outputAmount: TokenAmount, inputToken: Token): [TokenAmount, Pair] {
-    invariant(this.involvesToken(outputAmount.token) && this.involvesToken(inputToken), 'TOKEN')
+  public getInputAmount(outputAmount: TokenAmount, chainId: ChainId = ChainId.PULSE_TESTNET): [TokenAmount, Pair] {
+    invariant(this.involvesToken(outputAmount.token), 'TOKEN')
     if (
       JSBI.equal(this.reserve0.raw, ZERO) ||
       JSBI.equal(this.reserve1.raw, ZERO) ||
