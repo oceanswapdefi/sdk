@@ -147,6 +147,10 @@ export class Trade {
 
   public readonly feeTo: string = ZERO_ADDRESS
 
+  public readonly fee: Percent = new Percent(ZERO)
+
+  public readonly feeTo: string = ZERO_ADDRESS
+
   /**
    * Constructs an exact in trade with the given amount in and route
    * @param route route of the exact in trade

@@ -110,9 +110,9 @@ export interface Chain {
     multicall: string
     staking?: StakingContract[]
   }
-}
+]
 
-xport const PULSE_TESTNET: Chain = {
+export const PULSE_TESTNET: Chain = {
   id: 'pulse_testnet',
   chain_id: 942,
   name: 'PulseChain Testnet V3',
