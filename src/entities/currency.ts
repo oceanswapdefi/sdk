@@ -21,12 +21,7 @@ export class Currency {
   //$ public static readonly CAVAX: Currency = new Currency(18, 'AVAX', 'Avalanche')
 
   public static readonly CURRENCY = {
-    [ChainId.FUJI]: new Currency(18, CHAINS[ChainId.FUJI].symbol, CHAINS[ChainId.FUJI].name),
-    [ChainId.AVALANCHE]: new Currency(18, CHAINS[ChainId.AVALANCHE].symbol, CHAINS[ChainId.AVALANCHE].name),
-    [ChainId.WAGMI]: new Currency(18, CHAINS[ChainId.WAGMI].symbol, CHAINS[ChainId.WAGMI].name),
-    [ChainId.COSTON]: new Currency(18, CHAINS[ChainId.COSTON].symbol, CHAINS[ChainId.COSTON].name),
-    [ChainId.NEAR_MAINNET]: new Currency(24, CHAINS[ChainId.NEAR_MAINNET].symbol, CHAINS[ChainId.NEAR_MAINNET].name),
-    [ChainId.NEAR_TESTNET]: new Currency(24, CHAINS[ChainId.NEAR_TESTNET].symbol, CHAINS[ChainId.NEAR_TESTNET].name),
+    [ChainId.PULSE_TESTNET]: new Currency(18, CHAINS[ChainId.PULSE_TESTNET].symbol, CHAINS[ChainId.PULSE_TESTNET].name),
   }
 
   /**
