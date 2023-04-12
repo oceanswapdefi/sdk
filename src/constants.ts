@@ -21,9 +21,14 @@ export const FACTORY_ADDRESS: { [chainId in ChainId]: string } = {
 
 export const INIT_CODE_HASH = '0x40231f6b438bce0797c9ada29b718a87ea0a5cea3fe9a771abdd76bd41a3e545'
 
+export const INIT_CODE_HASH_MAPPING: { [chainId in ChainId]: string } = {
+  [ChainId.PULSE_TESTNET]: INIT_CODE_HASH
+}
+
 export const MINIMUM_LIQUIDITY = JSBI.BigInt(1000)
 
 // exports for internal consumption
+export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 export const ZERO = JSBI.BigInt(0)
 export const ONE = JSBI.BigInt(1)
 export const TWO = JSBI.BigInt(2)

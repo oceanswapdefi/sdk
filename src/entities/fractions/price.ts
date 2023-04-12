@@ -11,24 +11,19 @@ import { Fraction } from './fraction'
 import { CurrencyAmount } from './currencyAmount'
 import { ChainId } from '../../chains'
 
-
 export class Price extends Fraction {
   /**
-     * Produces the on-chain method name to call and the hex encoded parameters to pass as arguments for a given trade.
-     * @param chainId
-     */
+   * Produces the on-chain method name to call and the hex encoded parameters to pass as arguments for a given trade.
+   * @param chainId
+   */
   public readonly baseCurrency: Currency // input i.e. denominator
   public readonly quoteCurrency: Currency // output i.e. numerator
   public readonly scalar: Fraction // used to adjust the raw fraction w/r/t the decimals of the {base,quote}Token
 
   public static fromRoute(route: Route): Price {
     const prices: Price[] = []
-    for (const [i, pair] of route.pairs.entries()) {
-      prices.push(
-        route.path[i].equals(pair.token0)
-          ? new Price(pair.reserve0.currency, pair.reserve1.currency, pair.reserve0.raw, pair.reserve1.raw)
-          : new Price(pair.reserve1.currency, pair.reserve0.currency, pair.reserve1.raw, pair.reserve0.raw)
-      )
+    for (const [i, pool] of route.pools.entries()) {
+      prices.push(pool.priceOf(route.path[i], route.path[i + 1]))
     }
     return prices.slice(1).reduce((accumulator, currentValue) => accumulator.multiply(currentValue), prices[0])
   }

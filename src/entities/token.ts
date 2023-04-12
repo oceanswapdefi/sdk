@@ -3,6 +3,7 @@ import { ChainId } from '../chains'
 import { validateAndParseAddress } from '../utils'
 import { Currency } from './currency'
 import { CHAINS } from '../chains'
+import { ZERO_ADDRESS } from '../constants'
 
 /**
  * Represents an ERC20 token with a unique address and some metadata.
@@ -15,7 +16,7 @@ export class Token extends Currency {
     super(decimals, symbol, name)
     this.chainId = chainId
 
-     // only validate address for evm chains
+    // only validate address for evm chains
     const shouldValidateAddress = !!CHAINS[chainId]?.evm
     this.address = shouldValidateAddress ? validateAndParseAddress(address) : address
   }

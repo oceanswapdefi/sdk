@@ -20,7 +20,7 @@ export class Currency {
 
   //$ public static readonly CAVAX: Currency = new Currency(18, 'AVAX', 'Avalanche')
 
-  public static readonly CURRENCY = {
+  public static readonly CURRENCY: { [chainId in ChainId]: Currency } = {
     [ChainId.PULSE_TESTNET]: new Currency(18, CHAINS[ChainId.PULSE_TESTNET].symbol, CHAINS[ChainId.PULSE_TESTNET].name),
   }
 
