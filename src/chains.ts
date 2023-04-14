@@ -110,7 +110,7 @@ export interface Chain {
     multicall: string
     staking?: StakingContract[]
   }
-]
+}
 
 export const PULSE_TESTNET: Chain = {
   id: 'pulse_testnet',
@@ -124,6 +124,7 @@ export const PULSE_TESTNET: Chain = {
   pangolin_is_live: false,
   tracked_by_debank: false,
   supported_by_gelato: false,
+  supported_by_twap: false,
   rpc_uri: 'https://rpc.v3.testnet.pulsechain.com',
   // subgraph: {
   //   exchange: 'https://api.thegraph.com/subgraphs/name/pangolindex/exchange',
@@ -135,6 +136,7 @@ export const PULSE_TESTNET: Chain = {
     factory: '0x3aA799fbBeD860e2Df3623dCAfa557DA27Cb4C62',
     router: '0xB07FE748Cf95DBcb23133088E0b2335C6Ce01A06',
     wrapped_native_token: '0x70499adEBB11Efd915E3b69E700c331778628707',
+    multicall: '0x0',
   //   local_multisig: '0x0',
   //   community_treasury: '0x0',
   //   treasury_vester: '0x0',
