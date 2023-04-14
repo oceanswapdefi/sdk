@@ -283,7 +283,7 @@ export class Trade {
       let amountOut: TokenAmount
       try {
         ;[amountOut] = pair.getOutputAmount(amountIn, chainId)
-      } catch (error: any) {
+      } catch (error) {
         // input too low
         if (error.isInsufficientInputAmountError) {
           continue
@@ -372,7 +372,7 @@ export class Trade {
       let amountIn: TokenAmount
       try {
         ;[amountIn] = pair.getInputAmount(amountOut, chainId)
-      } catch (error: any) {
+      } catch (error) {
         // not enough liquidity in this pair
         if (error.isInsufficientReservesError) {
           continue
