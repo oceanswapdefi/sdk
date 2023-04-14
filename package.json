@@ -10,8 +10,8 @@
   ],
   "repository": "https://github.com/oceanswapdefi/sdk",
   "keywords": [
-    "pangolin",
-    "avalanche"
+    "oceanswap",
+    "pulse"
   ],
   "module": "dist/sdk.esm.js",
   "scripts": {
