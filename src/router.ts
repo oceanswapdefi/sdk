@@ -2,6 +2,7 @@ import { TradeType, ZERO, ZERO_ADDRESS } from './constants'
 import invariant from 'tiny-invariant'
 import { validateAndParseAddress } from './utils'
 import { CurrencyAmount, CAVAX, Percent, Trade } from './entities'
+import { ChainId } from './chains'
 
 /**
  * Options for producing the arguments to send call to the router.
