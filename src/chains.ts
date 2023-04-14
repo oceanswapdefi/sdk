@@ -132,11 +132,11 @@ export const PULSE_TESTNET: Chain = {
   // coingecko_id: 'avalanche',
   // debank_pangolin_id: 'avax_pangolin',
   contracts: {
-    png: '0x0',
+    png: '0x70499adEBB11Efd915E3b69E700c331778628707', // wrapped native - must change!
     factory: '0x3aA799fbBeD860e2Df3623dCAfa557DA27Cb4C62',
     router: '0xB07FE748Cf95DBcb23133088E0b2335C6Ce01A06',
     wrapped_native_token: '0x70499adEBB11Efd915E3b69E700c331778628707',
-    multicall: '0x0',
+    multicall: '0x05f32B3cC3888453ff71B01135B34FF8e41263F2',
   //   local_multisig: '0x0',
   //   community_treasury: '0x0',
   //   treasury_vester: '0x0',
