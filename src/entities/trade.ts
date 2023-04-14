@@ -147,9 +147,9 @@ export class Trade {
 
   public readonly feeTo: string = ZERO_ADDRESS
 
-  public readonly fee: Percent = new Percent(ZERO)
+  // public readonly fee: Percent = new Percent(ZERO)
 
-  public readonly feeTo: string = ZERO_ADDRESS
+  // public readonly feeTo: string = ZERO_ADDRESS
 
   /**
    * Constructs an exact in trade with the given amount in and route
@@ -235,7 +235,7 @@ export class Trade {
    * Get the minimum amount that must be received from this trade for the given slippage tolerance
    * @param slippageTolerance tolerance of unfavorable slippage from the execution price of this trade
    */
-  public minimumAmountOut(slippageTolerance: Percent, chainId: ChainId = ChainId.PULSE_TESTNET): CurrencyAmount {
+  public minimumAmountOut(slippageTolerance: Percent, _chainId: ChainId = ChainId.PULSE_TESTNET): CurrencyAmount {
     invariant(!slippageTolerance.lessThan(ZERO), 'SLIPPAGE_TOLERANCE')
     if (this.tradeType === TradeType.EXACT_OUTPUT) {
       return this.outputAmount
@@ -254,7 +254,7 @@ export class Trade {
    * Get the maximum amount in that can be spent via this trade for the given slippage tolerance
    * @param slippageTolerance tolerance of unfavorable slippage from the execution price of this trade
    */
-  public maximumAmountIn(slippageTolerance: Percent, chainId: ChainId = ChainId.PULSE_TESTNET): CurrencyAmount {
+  public maximumAmountIn(slippageTolerance: Percent, _chainId: ChainId = ChainId.PULSE_TESTNET): CurrencyAmount {
     invariant(!slippageTolerance.lessThan(ZERO), 'SLIPPAGE_TOLERANCE')
     if (this.tradeType === TradeType.EXACT_INPUT) {
       return this.inputAmount

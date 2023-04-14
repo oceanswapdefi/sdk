@@ -3,7 +3,7 @@ import { ChainId } from '../chains'
 import { validateAndParseAddress } from '../utils'
 import { Currency } from './currency'
 import { CHAINS } from '../chains'
-import { ZERO_ADDRESS } from '../constants'
+// import { ZERO_ADDRESS } from '../constants'
 
 /**
  * Represents an ERC20 token with a unique address and some metadata.

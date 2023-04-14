@@ -73,9 +73,9 @@ export abstract class Pool {
 
   // Swap
 
-  abstract getOutputAmount(inputAmount: TokenAmount, outputToken: Token): [TokenAmount, Pool]
+  abstract getOutputAmount(inputAmount: TokenAmount, chainId?: ChainId): [TokenAmount, Pool]
 
-  abstract getInputAmount(outputAmount: TokenAmount, inputToken: Token): [TokenAmount, Pool]
+  abstract getInputAmount(outputAmount: TokenAmount, chainId?: ChainId): [TokenAmount, Pool]
 
   // Swap Fees
 

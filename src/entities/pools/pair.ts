@@ -42,14 +42,7 @@ export class Pair extends Pool {
       ? [tokenAmountA, tokenAmountB]
       : [tokenAmountB, tokenAmountA]
 
-    let decimals: number
-    if ([ChainId.NEAR_TESTNET, ChainId.NEAR_MAINNET].includes(chainId)) {
-      decimals = 24
-    } else if ([ChainId.HEDERA_TESTNET, ChainId.HEDERA_MAINNET].includes(chainId)) {
-      decimals = 0
-    } else {
-      decimals = 18
-    }
+    const decimals = 18;
 
     const liquidityToken = new Token(
       chainId,
@@ -97,7 +90,7 @@ export class Pair extends Pool {
     }
   }
 
-  public getOutputAmount(inputAmount: TokenAmount, chainId: ChainId = ChainId.PULSE_TESTNET): [TokenAmount, Pair] {
+  public getOutputAmount(inputAmount: TokenAmount, _chainId: ChainId = ChainId.PULSE_TESTNET): [TokenAmount, Pair] {
     invariant(this.involvesToken(inputAmount.token), 'TOKEN')
     if (JSBI.equal(this.reserve0.raw, ZERO) || JSBI.equal(this.reserve1.raw, ZERO)) {
       throw new InsufficientReservesError()
@@ -117,7 +110,7 @@ export class Pair extends Pool {
     return [outputAmount, new Pair(inputReserve.add(inputAmount), outputReserve.subtract(outputAmount), this.chainId)]
   }
 
-  public getInputAmount(outputAmount: TokenAmount, chainId: ChainId = ChainId.PULSE_TESTNET): [TokenAmount, Pair] {
+  public getInputAmount(outputAmount: TokenAmount, _chainId: ChainId = ChainId.PULSE_TESTNET): [TokenAmount, Pair] {
     invariant(this.involvesToken(outputAmount.token), 'TOKEN')
     if (
       JSBI.equal(this.reserve0.raw, ZERO) ||
