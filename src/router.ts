@@ -1,8 +1,8 @@
-import { TradeType, ZERO, ZERO_ADDRESS } from './constants'
+import { TradeType } from './constants'
 import invariant from 'tiny-invariant'
 import { validateAndParseAddress } from './utils'
 import { CurrencyAmount, CAVAX, Percent, Trade } from './entities'
-import { ChainId } from './chains'
+import { ChainId } from '.'
 
 /**
  * Options for producing the arguments to send call to the router.
@@ -81,12 +81,9 @@ export abstract class Router {
     invariant(!(etherIn && etherOut), 'ETHER_IN_OUT')
     invariant(!('ttl' in options) || options.ttl > 0, 'TTL')
 
-    const feeToDaaS: string = validateAndParseAddress(trade.feeTo)
-    const isDaaS = Boolean(feeToDaaS !== ZERO_ADDRESS && !trade.fee.equalTo(ZERO))
-
     const to: string = validateAndParseAddress(options.recipient)
-    const amountIn: string = toHex(trade.maximumAmountIn(options.allowedSlippage))
-    const amountOut: string = toHex(trade.minimumAmountOut(options.allowedSlippage))
+    const amountIn: string = toHex(trade.maximumAmountIn(options.allowedSlippage, chainId))
+    const amountOut: string = toHex(trade.minimumAmountOut(options.allowedSlippage, chainId))
     const path: string[] = trade.route.path.map(token => token.address)
     const deadline =
       'ttl' in options
@@ -101,46 +98,40 @@ export abstract class Router {
     switch (trade.tradeType) {
       case TradeType.EXACT_INPUT:
         if (etherIn) {
-          methodName = useFeeOnTransfer
-            ? 'swapExactAVAXForTokensSupportingFeeOnTransferTokens'
-            : 'swapExactAVAXForTokens'
-          args = isDaaS ? [amountOut, path, to, deadline, feeToDaaS] : [amountOut, path, to, deadline]
+          methodName = useFeeOnTransfer ? 'swapExactETHForTokensSupportingFeeOnTransferTokens' : 'swapExactETHForTokens'
+          // (uint amountOutMin, address[] calldata path, address to, uint deadline)
+          args = [amountOut, path, to, deadline]
           value = amountIn
         } else if (etherOut) {
-          methodName = useFeeOnTransfer
-            ? 'swapExactTokensForAVAXSupportingFeeOnTransferTokens'
-            : 'swapExactTokensForAVAX'
-          args = isDaaS
-            ? [amountIn, amountOut, path, to, deadline, feeToDaaS]
-            : [amountIn, amountOut, path, to, deadline]
+          methodName = useFeeOnTransfer ? 'swapExactTokensForETHSupportingFeeOnTransferTokens' : 'swapExactTokensForETH'
+          // (uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline)
+          args = [amountIn, amountOut, path, to, deadline]
           value = ZERO_HEX
         } else {
           methodName = useFeeOnTransfer
             ? 'swapExactTokensForTokensSupportingFeeOnTransferTokens'
             : 'swapExactTokensForTokens'
-          args = isDaaS
-            ? [amountIn, amountOut, path, to, deadline, feeToDaaS]
-            : [amountIn, amountOut, path, to, deadline]
+          // (uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline)
+          args = [amountIn, amountOut, path, to, deadline]
           value = ZERO_HEX
         }
         break
       case TradeType.EXACT_OUTPUT:
         invariant(!useFeeOnTransfer, 'EXACT_OUT_FOT')
         if (etherIn) {
-          methodName = 'swapAVAXForExactTokens'
-          args = isDaaS ? [amountOut, path, to, deadline, feeToDaaS] : [amountOut, path, to, deadline]
+          methodName = 'swapETHForExactTokens'
+          // (uint amountOut, address[] calldata path, address to, uint deadline)
+          args = [amountOut, path, to, deadline]
           value = amountIn
         } else if (etherOut) {
-          methodName = 'swapTokensForExactAVAX'
-          args = isDaaS
-            ? [amountOut, amountIn, path, to, deadline, feeToDaaS]
-            : [amountOut, amountIn, path, to, deadline]
+          methodName = 'swapTokensForExactETH'
+          // (uint amountOut, uint amountInMax, address[] calldata path, address to, uint deadline)
+          args = [amountOut, amountIn, path, to, deadline]
           value = ZERO_HEX
         } else {
           methodName = 'swapTokensForExactTokens'
-          args = isDaaS
-            ? [amountOut, amountIn, path, to, deadline, feeToDaaS]
-            : [amountOut, amountIn, path, to, deadline]
+          // (uint amountOut, uint amountInMax, address[] calldata path, address to, uint deadline)
+          args = [amountOut, amountIn, path, to, deadline]
           value = ZERO_HEX
         }
         break

@@ -2,14 +2,16 @@ import { Contract } from '@ethersproject/contracts'
 import { getNetwork } from '@ethersproject/networks'
 import { getDefaultProvider } from '@ethersproject/providers'
 import { TokenAmount } from './entities/fractions/tokenAmount'
-import { Pair } from './entities/pools'
+import { Pair } from './entities/pair'
+import OceanswapPair from './abis/OceanswapPair.json'
 import invariant from 'tiny-invariant'
 import ERC20 from './abis/ERC20.json'
-import IPangolinPair from './abis/Pair.json'
 import { ChainId } from './chains'
 import { Token } from './entities/token'
 
-let TOKEN_DECIMALS_CACHE: { [chainId: number]: { [address: string]: number } } = {}
+let TOKEN_DECIMALS_CACHE: { [chainId: number]: { [address: string]: number } } = {
+  
+}
 
 /**
  * Contains methods for constructing instances of pairs and tokens from on-chain data.
@@ -64,7 +66,7 @@ export abstract class Fetcher {
   ): Promise<Pair> {
     invariant(tokenA.chainId === tokenB.chainId, 'CHAIN_ID')
     const address = Pair.getAddress(tokenA, tokenB, tokenA.chainId)
-    const [reserves0, reserves1] = await new Contract(address, IPangolinPair, provider).getReserves()
+    const [reserves0, reserves1] = await new Contract(address, OceanswapPair.abi, provider).getReserves()
     const balances = tokenA.sortsBefore(tokenB) ? [reserves0, reserves1] : [reserves1, reserves0]
     return new Pair(new TokenAmount(tokenA, balances[0]), new TokenAmount(tokenB, balances[1]), tokenA.chainId)
   }
