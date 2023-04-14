@@ -140,8 +140,16 @@ export const PULSE_TESTNET: Chain = {
   //   local_multisig: '0x0',
   //   community_treasury: '0x0',
   //   treasury_vester: '0x0',
-  //   mini_chef: '0x0',
-  //   airdrop: '0x0',
+    mini_chef: {
+      address: '0x70499adEBB11Efd915E3b69E700c331778628707', // wrapped native - must change!
+      active: false,
+      type: ChefType.MINI_CHEF,
+    },
+    airdrop: {
+      address: '0x70499adEBB11Efd915E3b69E700c331778628707', // wrapped native - must change!
+      active: false,
+      type: AirdropType.LEGACY
+    }
   //   timelock: '0x0',
   //   governor: '0x0',
   //   migrator: '0x0',
