@@ -2,5 +2,5 @@ export * from './token'
 export * from './route'
 export * from './trade'
 export * from './currency'
-
+export * from './pair'
 export * from './fractions'
