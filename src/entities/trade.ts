@@ -182,22 +182,22 @@ export class Trade {
       amounts[0] = wrappedAmount(amount, route.chainId)
       for (let i = 0; i < route.path.length - 1; i++) {
         const pool = route.pools[i]
-        const [outputAmount, nextPool] = pool.getOutputAmount(amounts[i], route.path[i + 1])
+        const [outputAmount, nextPool] = pool.getOutputAmount(amounts[i])
         amounts[i + 1] = outputAmount
         nextPools[i] = nextPool
       }
       fullOutputAmount = amounts[amounts.length - 1]
-      const userReceivedAmountOut = new Fraction(ONE).subtract(fee).multiply(fullOutputAmount.raw).quotient
+      const userReceivedAmountOut = new Fraction(ONE).subtract(this.fee).multiply(fullOutputAmount.raw).quotient
       amounts[amounts.length - 1] = new TokenAmount(fullOutputAmount.token, userReceivedAmountOut)
     } else {
       invariant(currencyEquals(amount.currency, route.output), 'OUTPUT')
       const userReceivedAmountOut = wrappedAmount(amount, route.chainId)
-      const fullOutputQuantity = new Fraction(ONE).add(fee).multiply(userReceivedAmountOut.raw).quotient
+      const fullOutputQuantity = new Fraction(ONE).add(this.fee).multiply(userReceivedAmountOut.raw).quotient
       fullOutputAmount = new TokenAmount(userReceivedAmountOut.token, fullOutputQuantity)
       amounts[amounts.length - 1] = fullOutputAmount
       for (let i = route.path.length - 1; i > 0; i--) {
         const pool = route.pools[i - 1]
-        const [inputAmount, nextPool] = pool.getInputAmount(amounts[i], route.path[i - 1])
+        const [inputAmount, nextPool] = pool.getInputAmount(amounts[i])
         amounts[i - 1] = inputAmount
         nextPools[i - 1] = nextPool
       }
@@ -227,8 +227,8 @@ export class Trade {
     this.nextMidPrice = Price.fromRoute(new Route(nextPools, route.input, route.output))
     this.priceImpact = computePriceImpact(route.midPrice, this.inputAmount, fullOutputAmount)
     this.chainId = chainId
-    this.fee = fee
-    this.feeTo = feeTo
+    // this.fee = fee
+    // this.feeTo = feeTo
   }
 
   /**
@@ -329,7 +329,7 @@ export class Trade {
 
         let amountOut: TokenAmount
         try {
-          ;[amountOut] = pool.getOutputAmount(amountIn, tokenHop)
+          ;[amountOut] = pool.getOutputAmount(amountIn)
         } catch (error) {
           if (error instanceof InsufficientInputAmountError || error instanceof InsufficientReservesError) {
             continue
@@ -346,7 +346,7 @@ export class Trade {
               originalAmountIn,
               TradeType.EXACT_INPUT,
               chainId,
-              { fee, feeTo }
+              // { fee, feeTo }
             ),
             maxNumResults,
             tradeComparator
@@ -440,7 +440,7 @@ export class Trade {
 
         let amountIn: TokenAmount
         try {
-          ;[amountIn] = pool.getInputAmount(amountOut, tokenHop)
+          ;[amountIn] = pool.getInputAmount(amountOut)
         } catch (error) {
           if (error instanceof InsufficientInputAmountError || error instanceof InsufficientReservesError) {
             continue
@@ -457,7 +457,7 @@ export class Trade {
               originalAmountOut,
               TradeType.EXACT_OUTPUT,
               chainId,
-              { fee, feeTo }
+              // { fee, feeTo }
             ),
             maxNumResults,
             tradeComparator
